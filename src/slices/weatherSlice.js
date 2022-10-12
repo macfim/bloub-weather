@@ -1,14 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { fetchWeatherData } from "../api/weatherApi";
+import { getLocation } from "../utils/getLocation";
 
 export const getWeatherData = createAsyncThunk(
   "weather/getWeatherData",
   async (_, { rejectWithValue, getState }) => {
     try {
-      const userPosition = getState().weather.userPosition;
+      const userLocation = getState().weather.userLocation;
 
-      const weatherData = await fetchWeatherData(userPosition);
+      const weatherData = await fetchWeatherData(userLocation);
 
       return weatherData.data;
     } catch (err) {
@@ -21,32 +22,32 @@ export const getWeatherData = createAsyncThunk(
   }
 );
 
+export const getUserLocation = createAsyncThunk(
+  "weather/getUserLocation",
+  async (_, { rejectWithValue }) => {
+    try {
+      const location = await getLocation();
+
+      return { lat: location.coords.latitude, lon: location.coords.longitude };
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
 export const initialState = {
   weatherData: null,
   weatherStatus: "idle",
   weatherError: null,
-  userPosition: null,
+  userLocation: null,
+  userLocationStatus: "idle",
+  userLocationError: null,
 };
-
-const TUN_POS = { lot: 10.1858, lat: 36.8002 };
 
 const weatherSlice = createSlice({
   name: "weather",
   initialState,
-  reducers: {
-    setUserPosition(state, action) {
-      if (action.payload)
-        return {
-          ...state,
-          userPosition: action.payload,
-        };
-      else
-        return {
-          ...state,
-          userPosition: TUN_POS,
-        };
-    },
-  },
+  reducers: {},
   extraReducers: {
     // getWeatherData
     [getWeatherData.pending]: (state, action) => {
@@ -60,8 +61,21 @@ const weatherSlice = createSlice({
       state.weatherStatus = "failed";
       state.weatherError = action.payload;
     },
+
+    // getUserLocation
+    [getUserLocation.pending]: (state, action) => {
+      state.userLocationStatus = "loading";
+    },
+    [getUserLocation.fulfilled]: (state, action) => {
+      state.userLocationStatus = "success";
+      state.userLocation = action.payload;
+    },
+    [getUserLocation.rejected]: (state, action) => {
+      state.userLocationStatus = "error";
+      state.userLocationError = action.payload;
+    },
   },
 });
 
-export const { setUserPosition } = weatherSlice.actions;
+export const {} = weatherSlice.actions;
 export default weatherSlice.reducer;
