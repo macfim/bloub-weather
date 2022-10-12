@@ -5,15 +5,23 @@ export const initialState = {
   userPosition: null,
 };
 
+const TUN_POS = { lot: 10.1858, lat: 36.8002 };
+
 const weatherSlice = createSlice({
   name: "weather",
   initialState,
   reducers: {
     setUserPosition(state, action) {
-      return {
-        ...state,
-        userPosition: action.payload,
-      };
+      if (action.payload)
+        return {
+          ...state,
+          userPosition: action.payload,
+        };
+      else
+        return {
+          ...state,
+          userPosition: TUN_POS,
+        };
     },
   },
   extraReducers: {},

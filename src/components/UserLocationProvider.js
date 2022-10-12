@@ -7,14 +7,19 @@ const UserLocationProvider = ({ children }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      dispatch(
-        setUserPosition({
-          lat: position.coords.latitude,
-          lon: position.coords.longitude,
-        })
-      );
-    });
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        dispatch(
+          setUserPosition({
+            lat: position.coords.latitude,
+            lon: position.coords.longitude,
+          })
+        );
+      },
+      (error) => {
+        dispatch(setUserPosition());
+      }
+    );
   }, []);
 
   return { ...children };
