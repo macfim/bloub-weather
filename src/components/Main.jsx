@@ -13,7 +13,13 @@ const Main = () => {
   const unit = useSelector((state) => state.weather.unit);
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      dispatch(getWeatherData());
+    }, 1000 * 60);
+
     dispatch(getWeatherData());
+
+    return () => clearInterval(interval);
   }, [unit]);
 
   return (
@@ -22,10 +28,11 @@ const Main = () => {
         <div className="text-2xl">
           <span>Right now in</span>
           <input
-            className={`focus:outline-none text-black w-20 px-2 bg-inherit border-b-2`}
+            className={`focus:outline-none text-black dark:text-white w-20 px-2 bg-inherit border-b-2`}
             placeholder={weatherData?.name}
           />
-          <span>, have {weatherData?.weather[0].description}.</span>
+          <span>, have {weatherData?.weather[0]?.description ? weatherData.weather[0].description : "loading"}.</span>
+          <br />
         </div>
         <div className="flex items-center justify-center">
           <div className="flex-auto h-auto w-[16rem]">
@@ -41,11 +48,11 @@ const Main = () => {
               {weatherData?.main?.temp_min
                 ? Math.floor(weatherData.main.temp_min)
                 : 0}
-              <span>&deg;C</span> /{" "}
+              <span>{unit === "metric" ? "℃" : "℉"}</span> /{" "}
               {weatherData?.main?.temp_max
                 ? Math.floor(weatherData.main.temp_max)
                 : 0}
-              <span>&deg;C</span>
+              <span>{unit === "metric" ? "℃" : "℉"}</span>
             </div>
           </div>
           <div className="flex flex-col justify-center items-center w-[16rem] gap-4 flex-auto aspect-square">
@@ -128,6 +135,11 @@ const Main = () => {
           </label>
         </div>
       </div>
+      {weatherStatus === "loading" ? (
+        <span className="absolute top-1/3 dark:text-gray-700 text-gray-300">
+          loading...
+        </span>
+      ) : null}
     </div>
   );
 };
