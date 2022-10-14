@@ -15,11 +15,10 @@ const Main = () => {
   const weatherData = useSelector((state) => state.weather.weatherData);
   const weatherStatus = useSelector((state) => state.weather.weatherStatus);
 
-  if (weatherStatus === "loading") return <div>loading..</div>;
-
-  if (weatherStatus === "success")
+  if (weatherStatus !== "success") return <div>loading...</div>;
+  else
     return (
-      <div className="bg-gray-100 min-h-screen flex justify-center items-center z-[-10] font-semibold text-gray-500">
+      <div className="min-h-screen flex justify-center items-center z-[-10] font-semibold text-gray-500 dark:text-gray-300">
         <div className="h-full flex flex-col items-center justify-center">
           <div className="text-2xl">
             <span>Right now in</span>
@@ -34,7 +33,7 @@ const Main = () => {
               <WeatherIcon />
             </div>
             <div className="flex flex-col items-center justify-center w-[16rem] flex-auto aspect-square">
-              <div className="text-[10rem] text-black">
+              <div className="text-[10rem] text-black dark:text-white">
                 {Math.floor(weatherData.main.temp)}
               </div>
               <div className="relative top-[-2.5rem]">
@@ -83,7 +82,22 @@ const Main = () => {
           </div>
           <div>days</div>
         </div>
-        <div className="absolute bottom-0">toggle</div>
+        <div className="absolute bottom-0 flex w-full justify-center">
+          
+          <div className="absolute right-1 bottom-1">
+            <label className="inline-flex relative items-center cursor-pointer">
+              <input
+                type="checkbox"
+                defaultChecked={true}
+                className="sr-only peer"
+                onClick={({ target }) =>
+                  document.documentElement.classList.toggle("dark")
+                }
+              />
+              <div className="w-11 h-6 bg-gray-200 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            </label>
+          </div>
+        </div>
       </div>
     );
 };
