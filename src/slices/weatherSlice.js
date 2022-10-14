@@ -39,7 +39,7 @@ export const initialState = {
   weatherData: null,
   weatherStatus: "idle",
   weatherError: null,
-  userLocation: null,
+  userLocation: { lat: 35.8245029, lon: 10.5886908 },
   userLocationStatus: "idle",
   userLocationError: null,
 };
