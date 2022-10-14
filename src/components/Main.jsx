@@ -37,7 +37,7 @@ const Main = () => {
               <div className="text-[10rem] text-black">
                 {Math.floor(weatherData.main.temp)}
               </div>
-              <div>
+              <div className="relative top-[-2.5rem]">
                 {Math.floor(weatherData.main.temp_min)}
                 <span>&deg;C</span> / {Math.floor(weatherData.main.temp_max)}
                 <span>&deg;C</span>
@@ -45,22 +45,38 @@ const Main = () => {
             </div>
             <div className="flex flex-col justify-center items-center w-[16rem] gap-4 flex-auto aspect-square">
               <div className="flex gap-4 items-center w-36">
-                <img className="w-8 h-auto grayscale" src="/images/wicon/Wind.png" alt="wind" />
+                <img
+                  className="w-8 h-auto grayscale"
+                  src="/images/wicon/Wind.png"
+                  alt="wind"
+                />
                 <div>
                   <span className="text-2xl">{weatherData.wind.speed}</span>{" "}
                   <span className="text-xs">m/s</span>
                 </div>
               </div>
               <div className="flex gap-4 items-center w-36">
-                <img className="w-8 h-auto grayscale" src="/images/wicon/802_4.png" alt="visibility" />
+                <img
+                  className="w-8 h-auto grayscale"
+                  src="/images/wicon/802_4.png"
+                  alt="visibility"
+                />
                 <div>
-                  <span className="text-2xl">{weatherData.main.humidity}</span>%
+                  <span className="text-2xl">
+                    {weatherData.visibility / 1000}
+                  </span>{" "}
+                  <span className="text-xs">km</span>
                 </div>
               </div>
               <div className="flex gap-4 items-center w-36">
-                <img className="w-8 h-auto grayscale" src="/images/wicon/Cloud.png" alt="wind" />
+                <img
+                  className="w-8 h-auto grayscale"
+                  src="/images/wicon/Cloud.png"
+                  alt="wind"
+                />
                 <div>
-                  <span className="text-2xl">{weatherData.main.humidity}</span>%
+                  <span className="text-2xl">{weatherData.main.humidity}</span>{" "}
+                  <span className="text-xs">%</span>
                 </div>
               </div>
             </div>
