@@ -1,11 +1,18 @@
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
-const WeatherIcon = () => {
-  const id = useSelector(
-    (state) => state?.weather?.weatherData?.weather[0]?.id
-  );
-  const hours = new Date().getHours();
-  const isDay = hours > 6 && hours < 20;
+const WeatherIcon = ({ id, sunset }) => {
+  let isDay = false;
+
+  useEffect(() => {
+    if (isDay) document.documentElement.classList.remove("dark");
+    else document.documentElement.classList.add("dark");
+  }, [isDay]);
+
+  if (new Date().valueOf() / 1000 < sunset) {
+    isDay = true;
+  } else {
+    isDay = false;
+  }
 
   if (id === 200 || id === 201 || id === 202) {
     if (isDay) return <img src="/images/wicon/200_2.png" alt="200_2" />;
@@ -78,7 +85,7 @@ const WeatherIcon = () => {
   } else if (id === 802 || id === 803 || id === 804) {
     if (isDay) return <img src="/images/wicon/802_4.png" alt="802_4" />;
     else return <img src="/images/wicon/802_4n.png" alt="802_4n" />;
-  } else return <div>error</div>;
+  } else return <div className="text-center">loading</div>;
 };
 
 export default WeatherIcon;

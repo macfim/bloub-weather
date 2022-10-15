@@ -79,7 +79,7 @@ const Main = () => {
         </div>
         <div className="flex items-center justify-center">
           <div className="flex-auto h-auto w-[16rem]">
-            <WeatherIcon />
+            <WeatherIcon id={weatherData?.weather[0]?.id} sunset={weatherData?.sys?.sunset} />
           </div>
           <div className="flex flex-col items-center justify-center w-[16rem] flex-auto aspect-square">
             <div className="text-[10rem] text-black dark:text-white">
