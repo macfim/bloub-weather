@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const APP_ID = process.env.APP_ID;
+const APP_ID = import.meta.env.VITE_APP_ID;
 const BASE_URL = "https://api.openweathermap.org/data/2.5";
 
 export const fetchWeatherData = async (position, unit) => {
