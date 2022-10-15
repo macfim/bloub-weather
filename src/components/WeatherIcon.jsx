@@ -1,7 +1,11 @@
 import { useSelector } from "react-redux";
 
-const WeatherIcon = ({ isDay }) => {
-  const id = useSelector((state) => state?.weather?.weatherData?.weather[0]?.id);
+const WeatherIcon = () => {
+  const id = useSelector(
+    (state) => state?.weather?.weatherData?.weather[0]?.id
+  );
+  const hours = new Date().getHours();
+  const isDay = hours > 6 && hours < 20;
 
   if (id === 200 || id === 201 || id === 202) {
     if (isDay) return <img src="/images/wicon/200_2.png" alt="200_2" />;
