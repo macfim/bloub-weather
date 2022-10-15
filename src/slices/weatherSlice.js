@@ -7,10 +7,10 @@ export const getWeatherData = createAsyncThunk(
   "weather/getWeatherData",
   async (_, { rejectWithValue, getState }) => {
     try {
-      const userLocation = getState().weather.userLocation;
+      const location = getState().weather.location;
       const unit = getState().weather.unit;
 
-      const weatherData = await fetchWeatherData(userLocation, unit);
+      const weatherData = await fetchWeatherData(location, unit);
 
       return weatherData.data;
     } catch (err) {
@@ -40,9 +40,9 @@ export const initialState = {
   weatherData: null,
   weatherStatus: "idle",
   weatherError: null,
-  userLocation: { lat: 35.8245029, lon: 10.5886908 },
-  userLocationStatus: "idle",
-  userLocationError: null,
+  location: { lat: 35.8245029, lon: 10.5886908 },
+  locationStatus: "idle",
+  locationError: null,
   unit: "metric",
 };
 
@@ -70,15 +70,15 @@ const weatherSlice = createSlice({
 
     // getUserLocation
     [getUserLocation.pending]: (state, action) => {
-      state.userLocationStatus = "loading";
+      state.locationStatus = "loading";
     },
     [getUserLocation.fulfilled]: (state, action) => {
-      state.userLocationStatus = "success";
-      state.userLocation = action.payload;
+      state.locationStatus = "success";
+      state.location = action.payload;
     },
     [getUserLocation.rejected]: (state, action) => {
-      state.userLocationStatus = "error";
-      state.userLocationError = action.payload;
+      state.locationStatus = "error";
+      state.locationError = action.payload;
     },
   },
 });
