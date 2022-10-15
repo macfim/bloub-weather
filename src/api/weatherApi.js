@@ -10,3 +10,11 @@ export const fetchWeatherData = async (position, unit) => {
   const response = await axios.get(toFetch);
   return response;
 };
+
+export const fetchWeatherForecastData = async (position, unit) => {
+  const PARAMS = `forecast?lat=${position.lat}&lon=${position.lon}&appid=${APP_ID}&units=${unit}`;
+  const toFetch = `${BASE_URL}/${PARAMS}`;
+
+  const response = await axios.get(toFetch);
+  return response;
+};
