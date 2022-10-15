@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { getWeatherData, changeUnit } from "../slices/weatherSlice";
 
@@ -10,9 +10,15 @@ const TIME = 1000 * 60; // 1min
 const Main = () => {
   const dispatch = useDispatch();
 
+  const [inputValue, setInputValue] = useState("");
+  const [inputSize, setInputSize] = useState(1);
+
   const weatherData = useSelector((state) => state.weather.weatherData);
   const weatherStatus = useSelector((state) => state.weather.weatherStatus);
   const unit = useSelector((state) => state.weather.unit);
+
+  const inputRef = useRef();
+  const input = inputRef?.current;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -24,20 +30,49 @@ const Main = () => {
     return () => clearInterval(interval);
   }, [unit]);
 
+  useEffect(() => {
+    if (weatherData) {
+      setInputValue(weatherData.name);
+    }
+  }, [weatherData]);
+
+  useEffect(() => {
+    updateSize();
+  }, [inputValue]);
+
+  function updateSize() {
+    const inputLength = input?.value?.length;
+
+    if (inputLength === 0) setInputSize(1);
+    else if (inputLength > 0 && inputLength < 16)
+      setInputSize(input?.value?.length);
+  }
+
   return (
     <div className="min-h-screen flex justify-center items-center font-semibold text-gray-500 dark:text-gray-300">
       <div className="h-full flex flex-col items-center justify-center">
         <div className="text-2xl">
           <span>Right now in</span>
-          <input
-            className={`focus:outline-none text-black dark:text-white w-20 px-2 bg-inherit border-b-2`}
-            placeholder={weatherData?.name}
-          />
+          <div className="inline-block">
+            <input
+              value={inputValue}
+              onChange={({ target }) => {
+                setInputValue(target.value);
+              }}
+              size={inputSize}
+              ref={inputRef}
+              className={`focus:outline-none text-black mx-2 dark:text-white text-center placeholder:text-center bg-inherit border-gray-500 dark:border-gray-300 border-b-2`}
+            />
+          </div>
           <span>
             , have{" "}
-            {weatherData?.weather[0]?.description
-              ? weatherData.weather[0].description
-              : "loading"}
+            {weatherData?.weather[0]?.description ? (
+              <span className="underline decoration-gray-500 decoration-wavy decoration-1">
+                {weatherData.weather[0].description}
+              </span>
+            ) : (
+              "loading"
+            )}
             .
           </span>
           <br />
