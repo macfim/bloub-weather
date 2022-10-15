@@ -5,6 +5,8 @@ import { getWeatherData, changeUnit } from "../slices/weatherSlice";
 
 import WeatherIcon from "./WeatherIcon";
 
+const TIME = 1000 * 60; // 1min
+
 const Main = () => {
   const dispatch = useDispatch();
 
@@ -15,7 +17,7 @@ const Main = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       dispatch(getWeatherData());
-    }, 1000 * 60);
+    }, TIME);
 
     dispatch(getWeatherData());
 
@@ -23,7 +25,7 @@ const Main = () => {
   }, [unit]);
 
   return (
-    <div className="min-h-screen flex justify-center items-center z-[-10] font-semibold text-gray-500 dark:text-gray-300">
+    <div className="min-h-screen flex justify-center items-center font-semibold text-gray-500 dark:text-gray-300">
       <div className="h-full flex flex-col items-center justify-center">
         <div className="text-2xl">
           <span>Right now in</span>
@@ -31,7 +33,13 @@ const Main = () => {
             className={`focus:outline-none text-black dark:text-white w-20 px-2 bg-inherit border-b-2`}
             placeholder={weatherData?.name}
           />
-          <span>, have {weatherData?.weather[0]?.description ? weatherData.weather[0].description : "loading"}.</span>
+          <span>
+            , have{" "}
+            {weatherData?.weather[0]?.description
+              ? weatherData.weather[0].description
+              : "loading"}
+            .
+          </span>
           <br />
         </div>
         <div className="flex items-center justify-center">
@@ -125,13 +133,13 @@ const Main = () => {
           <label className="inline-flex relative items-center cursor-pointer">
             <input
               type="checkbox"
-              defaultChecked={true}
-              className="sr-only peer"
-              onClick={({ target }) =>
-                document.documentElement.classList.toggle("dark")
+              defaultChecked={() =>
+                document.documentElement.classList.contains("dark")
               }
+              className="sr-only peer"
+              onClick={() => document.documentElement.classList.toggle("dark")}
             />
-            <div className="w-11 h-6 bg-gray-200 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            <div className="w-11 h-6 bg-gray-200 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-gray-700"></div>
           </label>
         </div>
       </div>

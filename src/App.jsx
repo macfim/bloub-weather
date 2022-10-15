@@ -9,7 +9,7 @@ function App() {
     if (isDay) document.documentElement.classList.remove("dark");
     else document.documentElement.classList.add("dark");
   }, []);
-  
+
   return (
     <>
       <Main />
