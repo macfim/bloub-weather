@@ -58,7 +58,7 @@ const Main = () => {
   return (
     <div className="min-h-screen flex justify-center items-center font-semibold text-gray-500 dark:text-gray-300">
       <div className="h-full flex flex-col items-center justify-center">
-        <div className="text-2xl">
+        <div className="text-xl sm:text-2xl">
           <span>Right now in</span>
           <div className="inline-block">
             <input
@@ -108,7 +108,7 @@ const Main = () => {
               <span>{unit === "metric" ? "℃" : "℉"}</span>
             </div>
           </div>
-          <div className="flex flex-col justify-center items-center w-[16rem] gap-4 flex-auto aspect-square">
+          <div className="hidden md:flex flex-col justify-center items-center w-[16rem] gap-4 flex-auto aspect-square">
             <div className="flex gap-4 items-center w-36">
               <img
                 className="w-8 h-auto grayscale"

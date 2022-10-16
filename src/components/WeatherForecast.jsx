@@ -20,15 +20,13 @@ const WeatherForecast = () => {
     (state) => state.weather.weatherForecastError
   );
 
-  useEffect(
-    () =>
-      setWidth(carousel?.current?.scrollWidth - carousel?.current?.offsetWidth),
-    [weatherForecastData]
-  );
+  useEffect(() => {
+    setWidth(carousel?.current?.scrollWidth - carousel?.current?.offsetWidth);
+  }, [weatherForecastData]);
 
   return (
     <motion.div
-      className="flex flex-col items-center overflow-x-hidden select-none rounded-md ring-1 ring-gray-200 dark:ring-gray-700"
+      className="hidden md:flex flex-col items-center overflow-x-hidden select-none rounded-md ring-1 ring-gray-200 dark:ring-gray-700"
       ref={carousel}
     >
       <motion.div

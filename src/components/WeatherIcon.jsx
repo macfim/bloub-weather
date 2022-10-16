@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 const WeatherIcon = ({ id, icon }) => {
   let isDay = !icon?.includes?.("n");
 
