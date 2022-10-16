@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 
 import {
   getWeatherData,
@@ -7,6 +7,7 @@ import {
   changeUnit,
 } from "../slices/weatherSlice";
 
+import SearchBar from "./SearchBar";
 import WeatherIcon from "./WeatherIcon";
 import WeatherForecast from "./WeatherForecast";
 
@@ -15,15 +16,13 @@ const TIME = 1000 * 60; // 1min
 const Main = () => {
   const dispatch = useDispatch();
 
-  const [inputValue, setInputValue] = useState("");
-  const [inputSize, setInputSize] = useState(1);
-
   const weatherData = useSelector((state) => state.weather.weatherData);
   const weatherStatus = useSelector((state) => state.weather.weatherStatus);
+  const weatherError = useSelector((state) => state.weather.weatherError);
+
   const unit = useSelector((state) => state.weather.unit);
 
-  const inputRef = useRef();
-  const input = inputRef?.current;
+  const location = useSelector((state) => state.weather.location);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -35,42 +34,14 @@ const Main = () => {
     dispatch(getWeatherForecastData());
 
     return () => clearInterval(interval);
-  }, [unit]);
-
-  useEffect(() => {
-    if (weatherData) {
-      setInputValue(weatherData.name);
-    }
-  }, [weatherData]);
-
-  useEffect(() => {
-    updateSize();
-  }, [inputValue]);
-
-  function updateSize() {
-    const inputLength = input?.value?.length;
-
-    if (inputLength === 0) setInputSize(1);
-    else if (inputLength > 0 && inputLength < 16)
-      setInputSize(input?.value?.length);
-  }
+  }, [unit, location]);
 
   return (
     <div className="min-h-screen flex justify-center items-center font-semibold text-gray-500 dark:text-gray-300">
       <div className="h-full flex flex-col items-center justify-center">
         <div className="text-xl sm:text-2xl">
           <span>Right now in</span>
-          <div className="inline-block">
-            <input
-              value={inputValue}
-              onChange={({ target }) => {
-                setInputValue(target.value);
-              }}
-              size={inputSize}
-              ref={inputRef}
-              className={`focus:outline-none text-black mx-2 dark:text-white text-center placeholder:text-center bg-inherit border-gray-500 dark:border-gray-300 border-b-2`}
-            />
-          </div>
+          <SearchBar />
           <span>
             , have{" "}
             {weatherData?.weather[0]?.description ? (

@@ -18,3 +18,12 @@ export const fetchWeatherForecastData = async (position, unit) => {
   const response = await axios.get(toFetch);
   return response;
 };
+
+export const fetchGeocoding = async (name) => {
+  const BASE_URL = "https://api.openweathermap.org/geo/1.0";
+  const PARAMS = `direct?q=${name}&appid=${APP_ID}&limit=1`;
+  const toFetch = `${BASE_URL}/${PARAMS}`;
+
+  const response = await axios.get(toFetch);
+  return response;
+};

@@ -1,7 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { fetchWeatherData, fetchWeatherForecastData } from "../api/weatherApi";
-import { getLocation } from "../utils/getLocation";
+import {
+  fetchWeatherData,
+  fetchWeatherForecastData,
+  fetchGeocoding,
+} from "../api/weatherApi";
+
+import { getCurrentLocation } from "../utils/getLocation";
 
 export const getWeatherData = createAsyncThunk(
   "weather/getWeatherData",
@@ -46,11 +51,39 @@ export const getWeatherForecastData = createAsyncThunk(
   }
 );
 
+export const getLocation = createAsyncThunk(
+  "weather/getLocation",
+  async (_, { rejectWithValue, getState, dispatch }) => {
+    try {
+      const searchValue = getState().weather.searchValue;
+
+      const location = await fetchGeocoding(searchValue);
+
+      if (location.data.length === 0)
+        return rejectWithValue("city name not found");
+
+      return [
+        {
+          lat: location.data[0].lat,
+          lon: location.data[0].lon,
+        },
+        location.data[0].local_names.en,
+      ];
+    } catch (err) {
+      if (!err.response) {
+        throw err;
+      }
+
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 export const getUserLocation = createAsyncThunk(
   "weather/getUserLocation",
   async (_, { rejectWithValue }) => {
     try {
-      const location = await getLocation();
+      const location = await getCurrentLocation();
 
       return { lat: location.coords.latitude, lon: location.coords.longitude };
     } catch (err) {
@@ -60,6 +93,8 @@ export const getUserLocation = createAsyncThunk(
 );
 
 export const initialState = {
+  searchValue: "Hammam Sousse",
+
   weatherData: null,
   weatherStatus: "idle",
   weatherError: null,
@@ -81,6 +116,9 @@ const weatherSlice = createSlice({
   reducers: {
     changeUnit(state, action) {
       state.unit = action.payload;
+    },
+    setSearchValue(state, action) {
+      state.searchValue = action.payload;
     },
   },
   extraReducers: {
@@ -110,6 +148,20 @@ const weatherSlice = createSlice({
       state.weatherForecastError = action.payload;
     },
 
+    // getLocation
+    [getLocation.pending]: (state, action) => {
+      state.locationStatus = "loading";
+    },
+    [getLocation.fulfilled]: (state, action) => {
+      state.locationStatus = "success";
+      state.location = action.payload[0];
+      state.searchValue = action.payload[1];
+    },
+    [getLocation.rejected]: (state, action) => {
+      state.locationStatus = "error";
+      state.locationError = action.payload;
+    },
+
     // getUserLocation
     [getUserLocation.pending]: (state, action) => {
       state.locationStatus = "loading";
@@ -125,5 +177,5 @@ const weatherSlice = createSlice({
   },
 });
 
-export const { changeUnit } = weatherSlice.actions;
+export const { changeUnit, setSearchValue } = weatherSlice.actions;
 export default weatherSlice.reducer;
