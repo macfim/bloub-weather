@@ -5,14 +5,13 @@ import { getLocation } from "../utils/getLocation";
 
 export const getWeatherData = createAsyncThunk(
   "weather/getWeatherData",
-  async (_, { rejectWithValue, getState, dispatch }) => {
+  async (_, { rejectWithValue, getState }) => {
     try {
       const location = getState().weather.location;
       const unit = getState().weather.unit;
 
       const weatherData = await fetchWeatherData(location, unit);
 
-      dispatch(getWeatherForecastData());
       return weatherData.data;
     } catch (err) {
       if (!err.response) {

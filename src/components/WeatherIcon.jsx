@@ -1,18 +1,7 @@
 import { useEffect } from "react";
 
-const WeatherIcon = ({ id, sunset }) => {
-  let isDay = false;
-
-  useEffect(() => {
-    if (isDay) document.documentElement.classList.remove("dark");
-    else document.documentElement.classList.add("dark");
-  }, [isDay]);
-
-  if (new Date().valueOf() / 1000 < sunset) {
-    isDay = true;
-  } else {
-    isDay = false;
-  }
+const WeatherIcon = ({ id, icon }) => {
+  let isDay = !icon?.includes?.("n");
 
   if (id === 200 || id === 201 || id === 202) {
     if (isDay) return <img src="/images/wicon/200_2.png" alt="200_2" />;

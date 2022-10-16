@@ -1,9 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 
-import { getWeatherData, changeUnit } from "../slices/weatherSlice";
+import {
+  getWeatherData,
+  getWeatherForecastData,
+  changeUnit,
+} from "../slices/weatherSlice";
 
 import WeatherIcon from "./WeatherIcon";
+import WeatherForecast from "./WeatherForecast";
 
 const TIME = 1000 * 60; // 1min
 
@@ -23,9 +28,11 @@ const Main = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       dispatch(getWeatherData());
+      dispatch(getWeatherForecastData());
     }, TIME);
 
     dispatch(getWeatherData());
+    dispatch(getWeatherForecastData());
 
     return () => clearInterval(interval);
   }, [unit]);
@@ -79,7 +86,10 @@ const Main = () => {
         </div>
         <div className="flex items-center justify-center">
           <div className="flex-auto h-auto w-[16rem]">
-            <WeatherIcon id={weatherData?.weather[0]?.id} sunset={weatherData?.sys?.sunset} />
+            <WeatherIcon
+              id={weatherData?.weather[0]?.id}
+              icon={weatherData?.weather[0]?.icon}
+            />
           </div>
           <div className="flex flex-col items-center justify-center w-[16rem] flex-auto aspect-square">
             <div className="text-[10rem] text-black dark:text-white">
@@ -142,7 +152,9 @@ const Main = () => {
             </div>
           </div>
         </div>
-        <div>days</div>
+        <div>
+          <WeatherForecast />
+        </div>
       </div>
       <div className="absolute bottom-0 flex w-full justify-center">
         <div className="mx-auto pb-4 font-normal">
@@ -179,7 +191,7 @@ const Main = () => {
         </div>
       </div>
       {weatherStatus === "loading" ? (
-        <span className="absolute top-1/3 dark:text-gray-700 text-gray-300">
+        <span className="absolute top-[12rem] dark:text-gray-700 text-gray-300">
           loading...
         </span>
       ) : null}
