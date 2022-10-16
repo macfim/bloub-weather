@@ -180,9 +180,7 @@ const Main = () => {
           <label className="inline-flex relative items-center cursor-pointer">
             <input
               type="checkbox"
-              defaultChecked={() =>
-                document.documentElement.classList.contains("dark")
-              }
+              defaultChecked={true}
               className="sr-only peer"
               onClick={() => document.documentElement.classList.toggle("dark")}
             />
