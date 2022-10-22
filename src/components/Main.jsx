@@ -5,8 +5,10 @@ import {
   getWeatherData,
   getWeatherForecastData,
   changeUnit,
+  getUserLocation,
 } from "../slices/weatherSlice";
 
+import LocationIcon from "../icons/LocationIcon";
 import SearchBar from "./SearchBar";
 import WeatherIcon from "./WeatherIcon";
 import WeatherForecast from "./WeatherForecast";
@@ -41,7 +43,15 @@ const Main = () => {
       <div className="h-full flex flex-col items-center justify-center">
         <div className="text-xl sm:text-2xl">
           <span>Right now in</span>
-          <SearchBar />
+          <div className="inline-flex items-center">
+            <SearchBar />
+            <div
+              className="inline cursor-pointer"
+              onClick={() => dispatch(getUserLocation())}
+            >
+              <LocationIcon />
+            </div>
+          </div>
           <span>
             , have{" "}
             {weatherData?.weather[0]?.description ? (

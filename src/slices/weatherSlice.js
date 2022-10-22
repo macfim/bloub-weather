@@ -165,13 +165,16 @@ const weatherSlice = createSlice({
     // getUserLocation
     [getUserLocation.pending]: (state, action) => {
       state.locationStatus = "loading";
+      state.searchValue = "loading";
     },
     [getUserLocation.fulfilled]: (state, action) => {
       state.locationStatus = "success";
       state.location = action.payload;
+      state.searchValue = "Current";
     },
     [getUserLocation.rejected]: (state, action) => {
       state.locationStatus = "error";
+      state.searchValue = "error";
       state.locationError = action.payload;
     },
   },
